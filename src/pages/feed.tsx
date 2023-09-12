@@ -1,3 +1,5 @@
-export default function Home() {
-  return <main>FEED</main>;
+import { FeedTemplate } from "@/modules/feed/FeedTemplate";
+
+export default function Feed() {
+  return <FeedTemplate></FeedTemplate>;
 }
