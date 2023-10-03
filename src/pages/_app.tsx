@@ -1,4 +1,3 @@
-import { Header } from "@/components/header";
 import { Providers } from "@/providers";
 import { Layout } from "@/components/Layout";
 import "@/styles/index.css";
