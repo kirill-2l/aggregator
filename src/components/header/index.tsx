@@ -10,7 +10,7 @@ interface NavigationItem {
 const list: NavigationItem[] = [
   {
     label: "feed",
-    link: AppRoutes.FEED,
+    link: AppRoutes.Feed,
   },
   {
     label: "profile",
@@ -30,7 +30,7 @@ export function Header() {
       alignItems="center"
     >
       <GridItem>
-        <Link href={AppRoutes.HOME} fontSize="3xl" fontWeight="700">
+        <Link href={AppRoutes.Home} fontSize="3xl" fontWeight="700">
           Aggregator
         </Link>
       </GridItem>

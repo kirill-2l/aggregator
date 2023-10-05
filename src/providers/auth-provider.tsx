@@ -1,5 +1,5 @@
-import { AuthService } from "@/axios/auth";
-import { AuthApi } from "@/axios";
+import { AuthService } from "@/shared/services/auth";
+import { AuthApi } from "@/shared/services";
 import { router } from "next/client";
 import { AppRoutes } from "@/shared/const";
 
@@ -8,7 +8,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await AuthApi.test();
     } catch (err) {
-      router.push(AppRoutes.SIGN_IN);
+      router.push(AppRoutes.SignIn);
     }
   }
 
