@@ -34,13 +34,13 @@ export const SignInForm = () => {
     [dispatch]
   );
 
-  const onLoginClick = async () => {
+  const onLoginClick = useCallback(async () => {
     try {
       const result = await signIn({ username, password });
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [username, password, signIn]);
 
   return (
     <Flex justifyContent="center">
@@ -58,11 +58,19 @@ export const SignInForm = () => {
         <Heading>Sign in</Heading>
         <FormControl isRequired>
           <FormLabel>Email address</FormLabel>
-          <Input onChange={onChangeUsername} type="email" />
+          <Input
+            disabled={isLoading}
+            onChange={onChangeUsername}
+            type="email"
+          />
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Password</FormLabel>
-          <Input onChange={onChangePassword} type="password" />
+          <Input
+            disabled={isLoading}
+            onChange={onChangePassword}
+            type="password"
+          />
         </FormControl>
         <Flex>
           <Link href={AppRoutes.SignUp} fontSize="sm">
@@ -70,7 +78,9 @@ export const SignInForm = () => {
           </Link>
         </Flex>
         <Flex>
-          <Button onClick={onLoginClick}>Login</Button>
+          <Button disabled={isLoading} onClick={onLoginClick}>
+            Login
+          </Button>
         </Flex>
       </Box>
     </Flex>

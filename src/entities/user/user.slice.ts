@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User, UserSchema } from "./user.type";
+import { authService } from "@/services/auth";
 
 const initialState: UserSchema = {
   user: null,
@@ -16,6 +17,15 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      authService.endpoints.signIn.matchFulfilled,
+      (state, { payload }) => {
+        // state.token = payload.token;
+        // state.user = payload.user;
+      }
+    );
   },
 });
 
