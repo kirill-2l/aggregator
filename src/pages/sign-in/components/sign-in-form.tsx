@@ -10,22 +10,37 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { ChangeEvent, useCallback } from "react";
-import { loginActions } from "../slice";
+import { loginActions } from "@/services/auth/login.slice";
+import { useAppDispatch } from "@/providers/store/store-provider";
+import { useSignInMutation } from "@/services/auth/auth.service";
+import { getLoginPassword, getLoginUsername } from "@/services/auth";
+import { useSelector } from "react-redux";
 
 export const SignInForm = () => {
   const dispatch = useAppDispatch();
-  // const username = useSelector(getLoginUsername);
-  // const password = useSelector(getLoginPassword);
-  // const isLoading = useSelector(getLoginIsLoading);
-  // const error = useSelector(getLoginError);
-  // const forceUpdate = useForceUpdate();
-
+  const username = useSelector(getLoginUsername);
+  const password = useSelector(getLoginPassword);
+  const [signIn, { isLoading }] = useSignInMutation();
   const onChangeUsername = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       dispatch(loginActions.setUsername(e.target.value));
     },
     [dispatch]
   );
+  const onChangePassword = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(loginActions.setPassword(e.target.value));
+    },
+    [dispatch]
+  );
+
+  const onLoginClick = async () => {
+    try {
+      const result = await signIn({ username, password });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Flex justifyContent="center">
@@ -47,7 +62,7 @@ export const SignInForm = () => {
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Password</FormLabel>
-          <Input type="password" />
+          <Input onChange={onChangePassword} type="password" />
         </FormControl>
         <Flex>
           <Link href={AppRoutes.SignUp} fontSize="sm">
@@ -55,12 +70,9 @@ export const SignInForm = () => {
           </Link>
         </Flex>
         <Flex>
-          <Button>Login</Button>
+          <Button onClick={onLoginClick}>Login</Button>
         </Flex>
       </Box>
     </Flex>
   );
 };
-function useAppDispatch() {
-  throw new Error("Function not implemented.");
-}
