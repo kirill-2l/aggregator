@@ -1,1 +1,1 @@
-export { coreApi } from "./core.api";
+export { coreRtkApi as coreApi } from "./core.api";

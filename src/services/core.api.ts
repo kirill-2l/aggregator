@@ -1,8 +1,8 @@
-import { coreBaseQuery } from "@/services/core.instance";
+import { coreRtkBaseQuery } from "@/services/core.instance";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
-export const coreApi = createApi({
+export const coreRtkApi = createApi({
   reducerPath: "api",
-  baseQuery: coreBaseQuery,
+  baseQuery: coreRtkBaseQuery,
   endpoints: () => ({}),
 });

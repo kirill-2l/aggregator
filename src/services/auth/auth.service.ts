@@ -1,9 +1,9 @@
 import { Tokens, AuthCredentials } from "@/services/auth/auth.type";
-import { coreApi } from "@/services/core.api";
+import { coreRtkApi } from "@/services/core.api";
 
 const authUrl = "auth";
 
-export const authService = coreApi.injectEndpoints({
+export const authService = coreRtkApi.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation<AuthCredentials, AuthCredentials>({
       query: (payload) => ({
