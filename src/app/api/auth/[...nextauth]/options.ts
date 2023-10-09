@@ -1,23 +1,39 @@
-import { authService, useSignInMutation } from "@/services/auth";
-import nextAuth, { NextAuthOptions } from "next-auth";
+import { authService } from "@/services/auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { useAppDispatch } from "@/providers/store/store-provider";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
+      id: "username-login",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        username: { label: "Username", type: "text", placeholder: "smith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
         if (!credentials?.username || !credentials.password) return null;
         const { username, password } = credentials;
-        const res = await fetch();
-        const user = authService.endpoints.signIn.initiate(credentials);
-        return user || null;
+        try {
+          const res = await authService.signIn({ username, password });
+          return res.data.user;
+        } catch (err) {
+          return null;
+        }
       },
     }),
   ],
-  x,
+  callbacks: {
+    async jwt(payload) {
+      const { token, user } = payload;
+      if (user) return { ...token, ...user };
+
+      return token;
+    },
+    async session(payload) {
+      const { session, token } = payload;
+      session.user = token.user;
+      session.tokens = token.tokens;
+      return session;
+    },
+  },
 };

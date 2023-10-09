@@ -2,7 +2,7 @@ import { Provider, useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "@/entities/user/user.slice";
 import { loginReducer } from "@/services/auth/login.slice";
-import { authService } from "@/services/auth";
+import { authService } from "@/services/auth/auth2.service";
 
 const store = configureStore({
   reducer: {

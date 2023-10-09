@@ -18,15 +18,15 @@ export const userSlice = createSlice({
       state.user = null;
     },
   },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      authService.endpoints.signIn.matchFulfilled,
-      (state, { payload }) => {
-        // state.token = payload.token;
-        // state.user = payload.user;
-      }
-    );
-  },
+  // extraReducers: (builder) => {
+  //   builder.addMatcher(
+  //     authService.endpoints.signIn.matchFulfilled,
+  //     (state, { payload }) => {
+  //       // state.token = payload.token;
+  //       // state.user = payload.user;
+  //     }
+  //   );
+  // },
 });
 
 // Action creators are generated for each case reducer function

@@ -12,7 +12,7 @@ import {
 import { ChangeEvent, useCallback } from "react";
 import { loginActions } from "@/services/auth/login.slice";
 import { useAppDispatch } from "@/providers/store/store-provider";
-import { useSignInMutation } from "@/services/auth/auth.service";
+import { useSignInMutation } from "@/services/auth/auth2.service";
 import { getLoginPassword, getLoginUsername } from "@/services/auth";
 import { useSelector } from "react-redux";
 
