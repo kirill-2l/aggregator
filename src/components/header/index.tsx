@@ -1,6 +1,7 @@
-import { Container, Flex, Grid, GridItem } from "@chakra-ui/react";
+import { Avatar, Container, Flex, Grid, GridItem } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 import { AppRoutes } from "@/shared/const";
+import { useSession } from "next-auth/react";
 
 interface NavigationItem {
   link: string;
@@ -19,6 +20,8 @@ const list: NavigationItem[] = [
 ];
 
 export function Header() {
+  const { data: session, status } = useSession();
+
   return (
     <Grid
       p={4}
@@ -41,6 +44,14 @@ export function Header() {
               {i.label}
             </Link>
           ))}
+        </Flex>
+        <Flex gap={6} alignItems="flex-end">
+          {JSON.stringify(session)}
+          {/* {session && (
+            <Avatar
+              name={session.user.name}
+            />
+          )} */}
         </Flex>
       </GridItem>
     </Grid>

@@ -1,4 +1,3 @@
-import { userReducer } from "@/entities/user";
 import { useSignUpMutation } from "@/services/auth";
 import {
   Box,
@@ -8,33 +7,76 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
-import { sign } from "crypto";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { NextAuthProviderIds } from "@/app/api/auth/[...nextauth]/options";
+import { isErrorWithMessage, isFetchBaseQueryError } from "@/shared/helpers";
+
 export const SignUpForm = () => {
-  const [signUp, { isLoading }] = useSignUpMutation();
+  const [signUp, { isLoading, error }] = useSignUpMutation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const toast = useToast();
 
   const signUpUser = async () => {
-    if (!email || !password || !name) return null;
-    try {
-      const res = await signUp({ email, password, name });
-      console.log(res);
-      // const sign = signIn(undefined, {
+    if (!email || !password || !name || password !== confirmPassword) return;
 
-      // })
+    try {
+      const res = await signUp({ email, password, name }).unwrap();
+
+      toast({
+        title: "Account created.",
+        description: "We've created your account for you.",
+        status: "success",
+        isClosable: true,
+      });
+
+      // wtf?
+      const user = { ...res.user };
+
+      await signIn(NextAuthProviderIds.usernameLogin, {
+        email: user.email,
+        password: user.password,
+        redirect: false,
+      });
+
+      toast({
+        title: "You successfully authorized",
+        status: "success",
+        isClosable: true,
+      });
     } catch (err) {
-      console.log(err);
+      let errorMsg;
+      if (isFetchBaseQueryError(err)) {
+        errorMsg = "error" in err ? err.error : JSON.stringify(err.data);
+      }
+
+      if (isErrorWithMessage(err)) {
+        errorMsg = err.message;
+      }
+
+      errorMsg &&
+        toast({
+          title: "Error",
+          description: errorMsg,
+          status: "error",
+          isClosable: true,
+        });
     }
   };
 
   return (
     <Flex justifyContent="center">
       <Box
-        maxW={450}
+        display="grid"
+        gridGap={4}
+        gridAutoFlow="row dense"
+        maxW={600}
+        w="100%"
         p={16}
         borderRadius={4}
         border="1px"
@@ -44,18 +86,35 @@ export const SignUpForm = () => {
 
         <FormControl>
           <FormLabel>Your name</FormLabel>
-          <Input onChange={(e) => setName(e.target.value)} type="text" />
+          <Input
+            value={name || ""}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Email address</FormLabel>
-          <Input onChange={(e) => setEmail(e.target.value)} type="email" />
+          <Input
+            value={email || ""}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Password</FormLabel>
           <Input
+            value={password || ""}
             onChange={(e) => setPassword(e.target.value)}
+            type="password"
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Confirm password</FormLabel>
+          <Input
+            value={confirmPassword || ""}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             type="password"
           />
         </FormControl>

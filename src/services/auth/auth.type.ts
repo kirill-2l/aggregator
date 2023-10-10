@@ -12,9 +12,11 @@ export interface SingUpRequest {
   password: string;
 }
 export interface SingUpResponse {
-  name: string;
-  email: string;
-  password: string;
+  user: {
+    name: string;
+    email: string;
+    password: string;
+  };
   tokens: JwtToken;
 }
 
